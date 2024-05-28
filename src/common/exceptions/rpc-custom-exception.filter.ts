@@ -9,6 +9,17 @@ export class RcpCustomExceptionFilter implements ExceptionFilter {
 
     const rcpError = exception.getError();
 
+    console.log(rcpError, 'Hola');
+
+    if (rcpError.toString().includes('Empty response')) {
+      return response.status(500).json({
+        status: 500,
+        message: rcpError
+          .toString()
+          .substring(0, rcpError.toString().indexOf('(')),
+      });
+    }
+
     if (
       typeof rcpError === 'object' &&
       'status' in rcpError &&
